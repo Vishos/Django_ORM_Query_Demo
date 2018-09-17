@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% load static %}
+        <link href="{% static 'style.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Welcome to clonify {{user.name}} your id# {{user.id}}</h1>
+        <a href="/logout">Switch Users</a>
+    <div class="inline">
+        Add an Artist:
+        <form action="/createArtist" method="POST">
+            {% csrf_token %}
+            <p>Name: <input type="text" name="name" value=""></p>
+            <input type="submit" name="" value="Create Artist">
+        </form>
+        Add a Song:
+        <form action="/createSong" method="POST">
+            {% csrf_token %}
+            <p>Title: <input type="text" name="title" value=""></p>
+            <p>Artist: <select name="artist">
+                {% for artist in  all_artists %}
+                    <option value="{{artist.name}}">{{artist.name}}</option>
+                {% endfor %}
+            </select>
+            </p>
+            <input type="submit" name="" value="Create Song">
+        </form>
+
+        <p>All Artists:</p>
+        <ul>
+            {% for artist in all_artists %}
+                <li> {{ artist.name }}</li>
+                <ul>
+                    {% for song in artist.songs.all %}
+                        <li>{{song.title}}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="inline border">
+        <p>Favorite Songs</p>
+        {% for song in favorites %}
+            <p>{{song.title}} | <a href="/destroyFavorite/{{song.id}}"><button type="">Unlike</button></a></p>
+        {% empty %}
+            <p>Music hurts your ears doesn't it</p>
+        {% endfor %}
+    </div>
+    <div class="inline border">
+        <p>Songs I don't like yet...</p>
+        {% for song in not_favorites %}
+            <p>{{song.title}} | <a href="/createFavorite/{{song.id}}"><button type="">Like</button></a></p>
+        {% empty %}
+            <p>You already love all the things</p>
+        {% endfor %}
+    </div>
+    </body>
+</html>

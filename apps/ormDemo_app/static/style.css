@@ -1,0 +1,10 @@
+.inline{
+    display: inline-block;
+    vertical-align: top;
+}
+.center{
+    text-align: center;
+}
+.border{
+    border: 1px solid black;
+}
